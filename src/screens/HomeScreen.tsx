@@ -36,7 +36,6 @@ export function HomeScreen({ onStart, onCredits }: { onStart: () => void; onCred
       <Pill x={605} y={369} w={131} h={53} className="home-button" onClick={onCredits}>
         Credits
       </Pill>
-      <Logos />
     </div>
   )
 }
