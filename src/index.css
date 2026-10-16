@@ -684,6 +684,30 @@ a:focus-visible {
   top: 360px;
 }
 
+.credits-repo {
+  position: absolute;
+  left: 298px;
+  top: 394px;
+  width: 440px;
+  text-align: center;
+  font-family: var(--display-font);
+  font-size: 18px;
+  color: inherit;
+  text-decoration: underline;
+}
+
+.credits-repo-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  vertical-align: -4px;
+}
+
+.stage.portrait .credits-repo {
+  left: 118px;
+  top: 426px;
+}
+
 .stage.portrait .jrmf-logo {
   left: 220px;
   top: 560px;
