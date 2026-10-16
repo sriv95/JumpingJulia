@@ -1,10 +1,13 @@
 # Jumping Julia
 
-A from-scratch Vite + React + TypeScript recreation of **Jumping Julia**, the rook-jumping-maze game from the
+A Vite + React + TypeScript recreation of **Jumping Julia**, the rook-jumping-maze game from the
 [Julia Robinson Mathematics Festival](https://jrmf.org/) (originally built in Unity).
 
 Julia starts at A1. Each square holds a number; from a square she must jump **exactly that many squares**
 up, down, left or right, staying on the board. Reach the orange star to win. Revisiting squares is allowed.
+
+## Play at
+`https://sriv95.github.io/JumpingJulia/`
 
 ## Features
 
@@ -24,16 +27,6 @@ bun run dev      # start the dev server
 bun run build    # type-check and build to dist/
 bun run lint
 ```
-
-## Live site
-
-Play at `https://<your-github-username>.github.io/jumping-julia/`.
-
-## Deployment
-
-Every push to `main` runs `.github/workflows/deploy.yml`: install with Bun (`--frozen-lockfile`), typecheck, lint, build, then publish `dist/` to GitHub Pages. It can also be run manually (workflow_dispatch). In the repo settings, Pages source must be "GitHub Actions".
-
-The build uses relative asset paths (`base: './'`), so `dist/` can be hosted from any folder.
 
 ## Credits and licence
 
