@@ -1,4 +1,5 @@
 import { Board } from '../components/Board'
+import { useLayout } from '../components/LayoutContext'
 import { GearButton, NavArrows, Pill } from '../components/controls'
 import {
   MAX_SIZE,
@@ -12,11 +13,17 @@ import {
   type Puzzle,
 } from '../game/engine'
 
-const DIFFICULTIES: readonly { difficulty: Difficulty; label: string; y: number }[] = [
-  { difficulty: 'easy', label: 'Easy', y: 208 },
-  { difficulty: 'medium', label: 'Medium', y: 298 },
-  { difficulty: 'hard', label: 'Hard', y: 388 },
+const DIFFICULTIES: readonly { difficulty: Difficulty; label: string }[] = [
+  { difficulty: 'easy', label: 'Easy' },
+  { difficulty: 'medium', label: 'Medium' },
+  { difficulty: 'hard', label: 'Hard' },
 ]
+
+/** The two action buttons and the difficulty buttons: down the sides when wide, in rows under the board when upright. */
+const SPOTS = {
+  landscape: { first: [118, 208], second: [118, 390], difficulty: [[840, 208], [840, 298], [840, 388]] },
+  portrait: { first: [160, 740], second: [440, 740], difficulty: [[110, 830], [300, 830], [490, 830]] },
+} as const
 
 interface RandomScreenProps {
   puzzle: Puzzle
@@ -38,6 +45,7 @@ export function RandomScreen({
   onPlay,
   onGear,
 }: RandomScreenProps) {
+  const spot = SPOTS[useLayout().portrait ? 'portrait' : 'landscape']
   return (
     <div className="screen">
       <NavArrows
@@ -48,14 +56,14 @@ export function RandomScreen({
       >
         {puzzle.size}
       </NavArrows>
-      <Pill x={118} y={208} onClick={onPlay}>
+      <Pill x={spot.first[0]} y={spot.first[1]} onClick={onPlay}>
         Play
       </Pill>
-      <Pill x={118} y={390} onClick={onDeal}>
+      <Pill x={spot.second[0]} y={spot.second[1]} onClick={onDeal}>
         Random
       </Pill>
-      {DIFFICULTIES.map((d) => (
-        <Pill key={d.difficulty} x={840} y={d.y} selected={d.difficulty === difficulty} onClick={() => onDifficulty(d.difficulty)}>
+      {DIFFICULTIES.map((d, i) => (
+        <Pill key={d.difficulty} x={spot.difficulty[i][0]} y={spot.difficulty[i][1]} selected={d.difficulty === difficulty} onClick={() => onDifficulty(d.difficulty)}>
           {d.label}
         </Pill>
       ))}
@@ -76,6 +84,7 @@ interface CustomScreenProps {
 
 /** Build your own board: click a square to cycle its number from 1 to 5. */
 export function CustomScreen({ puzzle, onPuzzle, onSize, onReset, onPlay, onGear }: CustomScreenProps) {
+  const spot = SPOTS[useLayout().portrait ? 'portrait' : 'landscape']
   const goal = goalOf(puzzle)
   const cycle = (pos: Pos) => {
     const value = puzzle.grid[pos.r][pos.c]
@@ -91,10 +100,10 @@ export function CustomScreen({ puzzle, onPuzzle, onSize, onReset, onPlay, onGear
       >
         {puzzle.size}
       </NavArrows>
-      <Pill x={118} y={208} onClick={onPlay}>
+      <Pill x={spot.first[0]} y={spot.first[1]} onClick={onPlay}>
         Play
       </Pill>
-      <Pill x={118} y={390} onClick={onReset}>
+      <Pill x={spot.second[0]} y={spot.second[1]} onClick={onReset}>
         Reset
       </Pill>
       <Board puzzle={puzzle} onSquare={cycle} canClick={(pos) => !samePos(pos, goal)} />

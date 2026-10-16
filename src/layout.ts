@@ -1,6 +1,13 @@
-/** The game is drawn on a fixed 960 x 600 stage that is scaled to fit the window. */
-export const STAGE_W = 960
-export const STAGE_H = 600
+/**
+ * The game is drawn on a fixed stage that is scaled to fit the window: 960 x 600 when the
+ * window is wider than tall, and 600 x 960 when it is held upright.
+ */
+export const STAGE_LONG = 960
+export const STAGE_SHORT = 600
+
+export function stageSize(portrait: boolean): { w: number; h: number } {
+  return portrait ? { w: STAGE_SHORT, h: STAGE_LONG } : { w: STAGE_LONG, h: STAGE_SHORT }
+}
 
 /** Where the board sits on the stage and how big its squares are. */
 export interface BoardLayout {
@@ -14,20 +21,21 @@ export interface BoardLayout {
   readonly top: number
 }
 
-const BOARD_CENTER_X = 480
-const BOARD_CENTER_Y = 330
-const BOARD_MAX = 413
-const PITCH_MAX = 82.667
+const BOARD_CENTER = { landscape: { x: 480, y: 330 }, portrait: { x: 300, y: 390 } }
+const BOARD_MAX = { landscape: 413, portrait: 510 }
+const PITCH_MAX = { landscape: 82.667, portrait: 85 }
 
-export function boardLayout(size: number): BoardLayout {
-  const pitch = Math.min(PITCH_MAX, BOARD_MAX / size)
+export function boardLayout(size: number, portrait = false): BoardLayout {
+  const mode = portrait ? 'portrait' : 'landscape'
+  const pitch = Math.min(PITCH_MAX[mode], BOARD_MAX[mode] / size)
   const tile = 0.8 * pitch
   const gap = pitch - tile
+  const centre = BOARD_CENTER[mode]
   return {
     pitch,
     tile,
     gap,
-    left: BOARD_CENTER_X - (size * pitch) / 2 + gap / 2,
-    top: BOARD_CENTER_Y - (size * pitch) / 2 + gap / 2,
+    left: centre.x - (size * pitch) / 2 + gap / 2,
+    top: centre.y - (size * pitch) / 2 + gap / 2,
   }
 }

@@ -1,4 +1,5 @@
 import { Pill } from '../components/controls'
+import { useLayout } from '../components/LayoutContext'
 import { LeftBorder, Logos } from './HomeScreen'
 
 const CREDITS = [
@@ -8,6 +9,7 @@ const CREDITS = [
 ]
 
 export function CreditsScreen({ onBack }: { onBack: () => void }) {
+  const portrait = useLayout().portrait
   return (
     <div className="screen home">
       <LeftBorder />
@@ -24,7 +26,7 @@ export function CreditsScreen({ onBack }: { onBack: () => void }) {
         to Sam Loyd&apos;s &ldquo;Back from the Klondike&rdquo;
       </p>
       <Logos />
-      <Pill x={886} y={563} w={132} h={53} className="home-button" onClick={onBack}>
+      <Pill x={portrait ? 340 : 886} y={portrait ? 880 : 563} w={132} h={53} className="home-button" onClick={onBack}>
         Back
       </Pill>
     </div>

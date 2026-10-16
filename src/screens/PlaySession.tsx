@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Board, type BunnyPlacement } from '../components/Board'
 import { GearButton, NavArrows, Pill } from '../components/controls'
+import { useLayout } from '../components/LayoutContext'
 import { NotesPanel, RecordsPanel, type PanelKind } from '../components/SidePanels'
 import {
   directionBetween,
@@ -64,6 +65,12 @@ interface Replay {
   readonly heading: Dir
 }
 
+/** Where the Undo / Random-or-Custom / Restart buttons sit: down the left, or in a row under the board (clear of the bottom sheets). */
+const BUTTONS = {
+  landscape: { undo: [118, 208], middle: [118, 299], restart: [118, 390], back: [118, 208] },
+  portrait: { undo: [110, 740], middle: [300, 740], restart: [490, 740], back: [300, 740] },
+} as const
+
 const LOSE_MESSAGE = 'There is nowhere left to move. Undo or Restart to try again!'
 
 /** One sitting with a puzzle: the attempt, the notes, the side panels and any replay. */
@@ -85,6 +92,8 @@ export function PlaySession({
   onNewRandom,
   onEditCustom,
 }: PlaySessionProps) {
+  const { portrait } = useLayout()
+  const at = BUTTONS[portrait ? 'portrait' : 'landscape']
   const [play, setPlay] = useState<PlayState>(() =>
     saved ? restorePlay(puzzle, saved.path, saved.heading) : newPlay(puzzle),
   )
@@ -181,25 +190,25 @@ export function PlaySession({
       )}
 
       {replay ? (
-        <Pill x={118} y={208} onClick={leaveReplay}>
+        <Pill x={at.back[0]} y={at.back[1]} onClick={leaveReplay}>
           Back
         </Pill>
       ) : (
         <>
-          <Pill x={118} y={208} onClick={() => commit(undo(play), notes)}>
+          <Pill x={at.undo[0]} y={at.undo[1]} onClick={() => commit(undo(play), notes)}>
             Undo
           </Pill>
           {source.kind === 'random' && (
-            <Pill x={118} y={299} onClick={onNewRandom}>
+            <Pill x={at.middle[0]} y={at.middle[1]} onClick={onNewRandom}>
               Random
             </Pill>
           )}
           {source.kind === 'custom' && (
-            <Pill x={118} y={299} onClick={onEditCustom}>
+            <Pill x={at.middle[0]} y={at.middle[1]} onClick={onEditCustom}>
               Custom
             </Pill>
           )}
-          <Pill x={118} y={390} onClick={() => commit(restart(play), notes)}>
+          <Pill x={at.restart[0]} y={at.restart[1]} onClick={() => commit(restart(play), notes)}>
             Restart
           </Pill>
         </>

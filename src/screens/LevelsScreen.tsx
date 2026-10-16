@@ -1,4 +1,5 @@
 import { Pill, RoundButton, Toggle } from '../components/controls'
+import { useLayout } from '../components/LayoutContext'
 
 interface LevelsScreenProps {
   /** Which board size's puzzles are listed: 4, 5 or 6. */
@@ -14,14 +15,29 @@ interface LevelsScreenProps {
   onBack: () => void
 }
 
-const SIZES = [
-  { size: 4, x: 130 },
-  { size: 5, x: 305 },
-  { size: 6, x: 479 },
-]
-
-const COLUMN_X = [161, 233, 305, 377, 449]
-const ROW_Y = [228, 300, 372]
+/** Where everything sits on the wide stage and on the upright one. */
+const SPOTS = {
+  landscape: {
+    sizeX: [130, 305, 479],
+    sizeY: 129,
+    columnX: [161, 233, 305, 377, 449],
+    rowY: [228, 300, 372],
+    custom: [776, 241],
+    random: [776, 313],
+    toggle: [123, 540],
+    back: [873, 546],
+  },
+  portrait: {
+    sizeX: [110, 300, 490],
+    sizeY: 90,
+    columnX: [140, 220, 300, 380, 460],
+    rowY: [220, 300, 380],
+    custom: [160, 500],
+    random: [440, 500],
+    toggle: [300, 650],
+    back: [300, 880],
+  },
+} as const
 
 /** The puzzle picker behind the gear: 15 puzzles for each of three board sizes. */
 export function LevelsScreen({
@@ -36,31 +52,32 @@ export function LevelsScreen({
   onBack,
 }: LevelsScreenProps) {
   const first = (size - 4) * 15 + 1
+  const spot = SPOTS[useLayout().portrait ? 'portrait' : 'landscape']
   return (
     <div className="screen">
-      {SIZES.map((s) => (
-        <Pill key={s.size} x={s.x} y={129} w={155} h={57} selected={s.size === size} onClick={() => onSize(s.size)}>
-          {s.size}x{s.size}
+      {[4, 5, 6].map((n, i) => (
+        <Pill key={n} x={spot.sizeX[i]} y={spot.sizeY} w={155} h={57} selected={n === size} onClick={() => onSize(n)}>
+          {n}x{n}
         </Pill>
       ))}
 
       {Array.from({ length: 15 }, (_, i) => (
-        <RoundButton key={first + i} x={COLUMN_X[i % 5]} y={ROW_Y[Math.floor(i / 5)]} disabled={first + i > unlocked} onClick={() => onPick(first + i)}>
+        <RoundButton key={first + i} x={spot.columnX[i % 5]} y={spot.rowY[Math.floor(i / 5)]} disabled={first + i > unlocked} onClick={() => onPick(first + i)}>
           {first + i}
         </RoundButton>
       ))}
 
-      <Pill x={776} y={241} onClick={onCustom}>
+      <Pill x={spot.custom[0]} y={spot.custom[1]} onClick={onCustom}>
         Custom
       </Pill>
-      <Pill x={776} y={313} onClick={onRandom}>
+      <Pill x={spot.random[0]} y={spot.random[1]} onClick={onRandom}>
         Random
       </Pill>
 
       <div className="count-label">Count:</div>
-      <Toggle x={123} y={540} w={149} h={58} value={showCount} onChange={onCount} label="Count" fontSize={27} />
+      <Toggle x={spot.toggle[0]} y={spot.toggle[1]} w={149} h={58} value={showCount} onChange={onCount} label="Count" fontSize={27} />
 
-      <Pill x={873} y={546} onClick={onBack}>
+      <Pill x={spot.back[0]} y={spot.back[1]} onClick={onBack}>
         Back
       </Pill>
     </div>

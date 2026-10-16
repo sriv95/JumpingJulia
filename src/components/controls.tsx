@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { artUrl } from '../theme'
+import { useLayout } from './LayoutContext'
 
 /** Place an element on the stage by its centre point. */
 function centred(x: number, y: number, w: number, h: number): CSSProperties {
@@ -89,25 +90,27 @@ export function NavArrows({
   prevDisabled,
   nextDisabled,
 }: NavProps) {
+  // The control is centred on the stage: x 480 when wide, x 300 when upright.
+  const dx = useLayout().portrait ? -180 : 0
   return (
     <>
       <button
         type="button"
         className="nav"
-        style={centred(383.5, 49, 57, 57)}
+        style={centred(383.5 + dx, 49, 57, 57)}
         onClick={onPrev}
         disabled={prevDisabled}
         aria-label={prevLabel}
       >
         <img src={artUrl('nav-prev')} alt="" draggable={false} />
       </button>
-      <div className="nav-value" style={{ left: 410, top: 12, width: 139, height: 78 }}>
+      <div className="nav-value" style={{ left: 410 + dx, top: 12, width: 139, height: 78 }}>
         {children}
       </div>
       <button
         type="button"
         className="nav"
-        style={centred(575.5, 49, 57, 57)}
+        style={centred(575.5 + dx, 49, 57, 57)}
         onClick={onNext}
         disabled={nextDisabled}
         aria-label={nextLabel}
@@ -162,11 +165,12 @@ export function Toggle({
 
 /** The gear that opens the puzzle picker. */
 export function GearButton({ onClick }: { onClick: () => void }) {
+  const { portrait } = useLayout()
   return (
     <button
       type="button"
       className="gear"
-      style={centred(888, 544, 60, 60)}
+      style={portrait ? centred(550, 50, 60, 60) : centred(888, 544, 60, 60)}
       onClick={onClick}
       aria-label="Choose a puzzle"
     >

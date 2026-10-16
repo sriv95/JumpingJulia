@@ -1,24 +1,24 @@
-import { useEffect, useState, type ReactNode } from 'react'
-import { STAGE_H, STAGE_W } from '../layout'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { stageSize } from '../layout'
+import { LayoutContext } from './LayoutContext'
 
 interface Fit {
   scale: number
-  /** On a phone held upright the stage turns on its side so it can fill the screen. */
-  turned: boolean
+  /** A window taller than wide gets the upright 600 x 960 stage. */
+  portrait: boolean
 }
 
 function fit(): Fit {
   const w = window.innerWidth
   const h = window.innerHeight
-  const turned = h > w && w < 820
-  const availW = turned ? h : w
-  const availH = turned ? w : h
-  return { scale: Math.min(availW / STAGE_W, availH / STAGE_H), turned }
+  const portrait = h > w
+  const stage = stageSize(portrait)
+  return { scale: Math.min(w / stage.w, h / stage.h), portrait }
 }
 
 /** A fixed-size drawing area that scales to fill the window, like the original's canvas. */
 export function Stage({ children }: { children: ReactNode }) {
-  const [{ scale, turned }, setFit] = useState(fit)
+  const [{ scale, portrait }, setFit] = useState(fit)
 
   useEffect(() => {
     const onResize = () => setFit(fit())
@@ -30,19 +30,21 @@ export function Stage({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const frameW = (turned ? STAGE_H : STAGE_W) * scale
-  const frameH = (turned ? STAGE_W : STAGE_H) * scale
-  const transform = turned
-    ? `translate(${STAGE_H * scale}px, 0) rotate(90deg) scale(${scale})`
-    : `scale(${scale})`
+  const layout = useMemo(() => ({ portrait }), [portrait])
+  const { w, h } = stageSize(portrait)
 
   return (
-    <div className="viewport">
-      <div className="stage-frame" style={{ width: frameW, height: frameH }}>
-        <div className="stage" style={{ transform }}>
-          {children}
+    <LayoutContext value={layout}>
+      <div className="viewport">
+        <div className="stage-frame" style={{ width: w * scale, height: h * scale }}>
+          <div
+            className={`stage ${portrait ? 'portrait' : ''}`}
+            style={{ width: w, height: h, transform: `scale(${scale})` }}
+          >
+            {children}
+          </div>
         </div>
       </div>
-    </div>
+    </LayoutContext>
   )
 }

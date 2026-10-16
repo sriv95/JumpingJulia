@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from 'react'
 import { boardLayout } from '../layout'
+import { useLayout } from './LayoutContext'
 import { goalOf, samePos, type Dir, type Pos, type Puzzle } from '../game/engine'
 import { noteAt, type Notes } from '../game/notes'
 import { CURRENT_COLOR, GOAL_COLOR, PAW_FOR_VALUE, TILE_COLORS, artUrl } from '../theme'
@@ -47,7 +48,8 @@ export function Board({
   canClick,
 }: BoardProps) {
   const { size } = puzzle
-  const { pitch, tile, gap, left, top } = boardLayout(size)
+  const { portrait } = useLayout()
+  const { pitch, tile, gap, left, top } = boardLayout(size, portrait)
   const goal = goalOf(puzzle)
 
   // Julia turns by the shortest way round instead of spinning through a full turn.

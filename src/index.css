@@ -45,7 +45,7 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
-/* ---- Stage: a fixed 960 x 600 drawing area scaled to the window ---- */
+/* ---- Stage: a fixed 960 x 600 (or, upright, 600 x 960) drawing area scaled to the window ---- */
 
 .viewport {
   width: 100%;
@@ -64,8 +64,6 @@ a:focus-visible {
   position: absolute;
   left: 0;
   top: 0;
-  width: 960px;
-  height: 600px;
   transform-origin: 0 0;
   overflow: hidden;
   background: #fff;
@@ -596,6 +594,104 @@ a:focus-visible {
   font-size: 20px;
   font-weight: 400;
   line-height: 27px;
+}
+
+/* ---- Upright stage (600 x 960) ---- */
+
+.stage.portrait .jumps {
+  left: 0;
+  top: 84px;
+  width: 600px;
+  text-align: center;
+}
+
+.stage.portrait .replay-label {
+  left: 0;
+  top: 84px;
+  width: 600px;
+  font-size: 44px;
+  line-height: 48px;
+}
+
+/* Messages sit under the button row: a 6x6 board leaves no room between it and the buttons. */
+.stage.portrait .message.win {
+  left: 0;
+  top: 775px;
+  width: 600px;
+  text-align: center;
+}
+
+.stage.portrait .message.lose {
+  left: 50px;
+  top: 778px;
+  width: 500px;
+  font-size: 20px;
+  line-height: 26px;
+}
+
+.stage.portrait .panel-heading {
+  font-size: 28px;
+  line-height: 34px;
+}
+
+.stage.portrait .panel-body {
+  inset: 0 40px;
+}
+
+.stage.portrait .panel-tab-text {
+  writing-mode: horizontal-tb;
+  transform: none;
+  padding: 0;
+  font-size: 20px;
+}
+
+.stage.portrait .count-label {
+  top: 590px;
+  width: 600px;
+}
+
+.stage.portrait .left-border {
+  height: 960px;
+  object-fit: cover;
+  object-position: top;
+}
+
+.stage.portrait .title {
+  width: 519px;
+  height: 122px;
+  font-size: 52px;
+}
+
+.stage.portrait .home-tiles {
+  left: 150px;
+  top: 170px;
+}
+
+.stage.portrait .credits-row {
+  width: 600px;
+}
+
+.stage.portrait .credits-name {
+  right: 285px;
+}
+
+.stage.portrait .credits-job {
+  left: 367px;
+}
+
+.stage.portrait .credits-inspiration {
+  left: 118px;
+  top: 360px;
+}
+
+.stage.portrait .jrmf-logo {
+  left: 220px;
+  top: 560px;
+}
+
+.stage.portrait .cc-badge {
+  left: 192px;
+  top: 720px;
 }
 
 @media (prefers-reduced-motion: reduce) {
