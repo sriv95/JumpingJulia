@@ -16,7 +16,8 @@ interface PillProps {
   onClick?: () => void
   selected?: boolean
   disabled?: boolean
-  className?: string
+  /** The lighter display face of the title screens instead of the bold one. */
+  display?: boolean
   fontSize?: number
 }
 
@@ -30,13 +31,13 @@ export function Pill({
   onClick,
   selected,
   disabled,
-  className = '',
-  fontSize,
+  display,
+  fontSize = 28,
 }: PillProps) {
   return (
     <button
       type="button"
-      className={`pill ${selected ? 'pill-selected' : ''} ${className}`}
+      className={`btn flex items-center justify-center rounded-full enabled:active:brightness-90 ${selected ? 'bg-pink' : 'bg-blue'} ${display ? 'font-display font-normal' : 'font-bold'}`}
       style={{ ...centred(x, y, w, h), fontSize }}
       onClick={onClick}
       disabled={disabled}
@@ -63,7 +64,7 @@ export function RoundButton({
   disabled?: boolean
 }) {
   return (
-    <button type="button" className="round" style={centred(x, y, d, d)} onClick={onClick} disabled={disabled}>
+    <button type="button" className="btn rounded-[50%] text-[30px] font-bold" style={centred(x, y, d, d)} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   )
@@ -79,6 +80,9 @@ interface NavProps {
   prevDisabled?: boolean
   nextDisabled?: boolean
 }
+
+const NAV_BUTTON =
+  'bare absolute disabled:cursor-default disabled:opacity-30 enabled:active:brightness-90'
 
 /** The < number > control at the top of the screen. */
 export function NavArrows({
@@ -96,30 +100,34 @@ export function NavArrows({
     <>
       <button
         type="button"
-        className="nav"
+        className={NAV_BUTTON}
         style={centred(383.5 + dx, 49, 57, 57)}
         onClick={onPrev}
         disabled={prevDisabled}
         aria-label={prevLabel}
       >
-        <img src={artUrl('nav-prev')} alt="" draggable={false} />
+        <img className="img-fill" src={artUrl('nav-prev')} alt="" draggable={false} />
       </button>
-      <div className="nav-value" style={{ left: 410 + dx, top: 12, width: 139, height: 78 }}>
+      <div className="absolute flex items-center justify-center text-[64px] leading-none font-bold whitespace-nowrap" style={{ left: 410 + dx, top: 12, width: 139, height: 78 }}>
         {children}
       </div>
       <button
         type="button"
-        className="nav"
+        className={NAV_BUTTON}
         style={centred(575.5 + dx, 49, 57, 57)}
         onClick={onNext}
         disabled={nextDisabled}
         aria-label={nextLabel}
       >
-        <img src={artUrl('nav-next')} alt="" draggable={false} />
+        <img className="img-fill" src={artUrl('nav-next')} alt="" draggable={false} />
       </button>
     </>
   )
 }
+
+const TOGGLE_SIDE = 'bare flex-1 text-[length:inherit] font-bold'
+const TOGGLE_ON = 'bg-pink text-white'
+const TOGGLE_OFF = 'bg-white text-[#8e8e8e]'
 
 /** An On / Off switch. The chosen side is pink. */
 export function Toggle({
@@ -142,10 +150,10 @@ export function Toggle({
   fontSize: number
 }) {
   return (
-    <div className="toggle" style={{ ...centred(x, y, w, h), fontSize }} role="group" aria-label={label}>
+    <div className="absolute flex overflow-hidden rounded-full border-3 border-solid border-grey bg-white font-bold" style={{ ...centred(x, y, w, h), fontSize }} role="group" aria-label={label}>
       <button
         type="button"
-        className={value ? 'on' : ''}
+        className={`${TOGGLE_SIDE} ${value ? TOGGLE_ON : TOGGLE_OFF}`}
         aria-pressed={value}
         onClick={() => onChange(true)}
       >
@@ -153,7 +161,7 @@ export function Toggle({
       </button>
       <button
         type="button"
-        className={value ? '' : 'on'}
+        className={`${TOGGLE_SIDE} ${value ? TOGGLE_OFF : TOGGLE_ON}`}
         aria-pressed={!value}
         onClick={() => onChange(false)}
       >
@@ -169,12 +177,12 @@ export function GearButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       type="button"
-      className="gear"
+      className="bare absolute"
       style={portrait ? centred(550, 50, 60, 60) : centred(888, 544, 60, 60)}
       onClick={onClick}
       aria-label="Choose a puzzle"
     >
-      <img src={artUrl('gear')} alt="" draggable={false} />
+      <img className="img-fill" src={artUrl('gear')} alt="" draggable={false} />
     </button>
   )
 }

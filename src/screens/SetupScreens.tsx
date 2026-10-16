@@ -47,7 +47,7 @@ export function RandomScreen({
 }: RandomScreenProps) {
   const spot = SPOTS[useLayout().portrait ? 'portrait' : 'landscape']
   return (
-    <div className="screen">
+    <div className="absolute inset-0">
       <NavArrows
         prevLabel="Smaller board"
         nextLabel="Bigger board"
@@ -91,7 +91,7 @@ export function CustomScreen({ puzzle, onPuzzle, onSize, onReset, onPlay, onGear
     onPuzzle(withValue(puzzle, pos, (value % MAX_VALUE) + 1))
   }
   return (
-    <div className="screen">
+    <div className="absolute inset-0">
       <NavArrows
         prevLabel="Smaller board"
         nextLabel="Bigger board"

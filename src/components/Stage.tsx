@@ -35,10 +35,11 @@ export function Stage({ children }: { children: ReactNode }) {
 
   return (
     <LayoutContext value={layout}>
-      <div className="viewport">
-        <div className="stage-frame" style={{ width: w * scale, height: h * scale }}>
+      <div className="flex h-full w-full items-center justify-center">
+        <div className="relative overflow-hidden" style={{ width: w * scale, height: h * scale }}>
           <div
-            className={`stage ${portrait ? 'portrait' : ''}`}
+            className="absolute top-0 left-0 origin-top-left overflow-hidden bg-white"
+            data-portrait={portrait || undefined}
             style={{ width: w, height: h, transform: `scale(${scale})` }}
           >
             {children}

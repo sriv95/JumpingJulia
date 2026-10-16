@@ -26,6 +26,9 @@ interface PanelShellProps {
   children: ReactNode
 }
 
+/** A blue silhouette of a note icon, cut out of a sprite with a mask. */
+const ICON_MASK = 'absolute bg-blue [mask-repeat:no-repeat] [mask-size:100%_100%]'
+
 const FRAME_TOP = 78
 const FRAME_HEIGHT = 356
 
@@ -86,19 +89,19 @@ function PanelShell({
       }
     : { maskImage: maskUrl, WebkitMaskImage: maskUrl }
   return (
-    <div className="panel" style={style}>
-      <div className="panel-frame" />
+    <div className="absolute [transition:transform_0.25s_ease] motion-reduce:[transition:none]" style={style}>
+      <div className="absolute inset-0 rounded-[20px] border-4 border-solid border-grey bg-white" />
       <button
         type="button"
-        className="panel-tab"
+        className="bare absolute -left-32 w-33"
         style={{ ...tabStyle, visibility: tabHidden ? 'hidden' : 'visible' }}
         onClick={onToggle}
         aria-expanded={open}
       >
-        <span className="panel-tab-shape" style={shapeStyle} />
-        <span className="panel-tab-text">{title}</span>
+        <span className="absolute inset-0 bg-blue [mask-size:100%_100%]" style={shapeStyle} />
+        <span className="absolute inset-0 flex rotate-180 items-center justify-center pl-2 text-[22px] font-bold text-white [writing-mode:vertical-rl] portrait:rotate-0 portrait:p-0 portrait:text-[20px] portrait:[writing-mode:horizontal-tb]">{title}</span>
       </button>
-      <div className="panel-body" inert={!open}>
+      <div className="absolute inset-0 portrait:inset-x-40" inert={!open}>
         {children}
       </div>
     </div>
@@ -128,7 +131,7 @@ export function RecordsPanel({ tabHidden, open, onToggle, records, onReplay }: R
       tabHeight={105}
       sheetTabLeft={60}
     >
-      <div className="panel-heading" style={portrait ? { left: 0, top: 6, width: 600 } : { left: 0, top: 49, width: 180 }}>
+      <div className="absolute text-center text-[35px] leading-44 font-bold portrait:text-[28px] portrait:leading-34" style={portrait ? { left: 0, top: 6, width: 600 } : { left: 0, top: 49, width: 180 }}>
         Replay
       </div>
       {RECORD_LABELS.map(({ kind, label }, i) => {
@@ -144,7 +147,7 @@ export function RecordsPanel({ tabHidden, open, onToggle, records, onReplay }: R
             <Pill x={x} y={y} w={119} h={28} fontSize={15} disabled={!entry} onClick={() => onReplay(kind)}>
               {label}
             </Pill>
-            <div className="record-value" style={valueStyle}>
+            <div className="absolute flex items-center justify-center text-[32px] font-bold" style={valueStyle}>
               {entry ? entry.value : '–'}
             </div>
           </div>
@@ -195,22 +198,22 @@ export function NotesPanel({ tabHidden, open, onToggle, tool, onTool, multi, onM
         <button
           key={t}
           type="button"
-          className="note-tool"
+          className="bare absolute size-58"
           style={portrait ? { left: 70 + i * 92 - 29, top: 40 - 29 } : { left: x - 29, top: y - 29 }}
           onClick={() => onTool(t)}
           aria-label={label}
           aria-pressed={tool === t}
         >
           {tool === t && (
-            <span className="note-selection" style={{ backgroundImage: `url(${artUrl('selection')})` }} />
+            <span className="absolute inset-0 bg-[length:100%_100%]" style={{ backgroundImage: `url(${artUrl('selection')})` }} />
           )}
           {t === 'x' ? (
-            <img className="note-icon-x" src={artUrl('note-x-icon')} alt="" draggable={false} />
+            <img className="absolute top-10 left-10 size-38" src={artUrl('note-x-icon')} alt="" draggable={false} />
           ) : t === 'erase' ? (
-            <span className="note-icon-mask" style={maskOf('note-blank-icon', 38, 38, 0)} />
+            <span className={ICON_MASK} style={maskOf('note-blank-icon', 38, 38, 0)} />
           ) : (
             <span
-              className="note-icon-mask"
+              className={ICON_MASK}
               style={maskOf('note-arrow-icon', 45, 38, TOOL_ROTATION[t] ?? 0)}
             />
           )}
@@ -219,7 +222,7 @@ export function NotesPanel({ tabHidden, open, onToggle, tool, onTool, multi, onM
       <Pill x={portrait ? 100 : 70} y={portrait ? 108 : 245} w={84} h={36} fontSize={17} onClick={onClear}>
         Clear
       </Pill>
-      <div className="panel-caption" style={portrait ? { left: 190, top: 98, width: 140 } : { left: 0, top: 281, width: 142 }}>
+      <div className="absolute text-center text-[16px] leading-20 font-bold" style={portrait ? { left: 190, top: 98, width: 140 } : { left: 0, top: 281, width: 142 }}>
         Multi-note:
       </div>
       <Toggle

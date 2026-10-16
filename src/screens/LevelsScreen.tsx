@@ -58,7 +58,7 @@ export function LevelsScreen({
   const first = (size - 4) * 15 + 1
   const spot = SPOTS[useLayout().portrait ? 'portrait' : 'landscape']
   return (
-    <div className="screen">
+    <div className="absolute inset-0">
       {[4, 5, 6].map((n, i) => (
         <Pill key={n} x={spot.sizeX[i]} y={spot.sizeY} w={155} h={57} selected={n === size} onClick={() => onSize(n)}>
           {n}x{n}
@@ -78,7 +78,7 @@ export function LevelsScreen({
         Random
       </Pill>
 
-      <div className="count-label">Count:</div>
+      <div className="absolute top-468 left-0 w-245 text-center text-[28px] leading-36 font-bold portrait:top-590 portrait:w-600">Count:</div>
       <Toggle x={spot.toggle[0]} y={spot.toggle[1]} w={149} h={58} value={showCount} onChange={onCount} label="Count" fontSize={27} />
 
       <Pill x={spot.reset[0]} y={spot.reset[1]} w={200} onClick={onReset}>

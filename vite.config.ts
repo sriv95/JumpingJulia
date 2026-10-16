@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { viteSingleFile } from 'vite-plugin-singlefile'
@@ -8,6 +9,6 @@ export default defineConfig({
   base: './',
   // Everything (code, styles, sprites, fonts) is inlined into dist/index.html,
   // so the built game is a single file that works from anywhere.
-  plugins: [react(), viteSingleFile()],
+  plugins: [react(), tailwindcss(), viteSingleFile()],
   build: { assetsInlineLimit: 100_000_000 },
 })

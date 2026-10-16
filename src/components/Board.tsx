@@ -35,6 +35,14 @@ const ARROW_SPOT: Record<Dir, { x: number; y: number; rotate: number }> = {
   down: { x: 0.15, y: 0.6, rotate: 90 },
 }
 
+const LABEL = 'absolute -translate-1/2 leading-none font-bold whitespace-nowrap'
+const LAYER = 'pointer-events-none absolute inset-0'
+const SQUARE =
+  'pointer-events-auto absolute t-round-11 border-0 bg-[length:100%_100%] bg-no-repeat p-0 [transition:background-color_0.12s]'
+/** The ring around a square Julia can jump to: blue, then a white line just inside it. */
+const OUTLINED =
+  'shadow-[inset_0_0_0_calc(var(--t)*0.045)_#065ef9,inset_0_0_0_calc(var(--t)*0.06)_#fff]'
+
 const columnLetter = (c: number) => String.fromCharCode(65 + c)
 
 export function Board({
@@ -81,12 +89,12 @@ export function Board({
   })()
 
   return (
-    <div className="board" style={{ '--t': `${tile}px` } as CSSProperties}>
-      <div className="board-label small" style={labelBox(squareLeft(0) + tile / 2, squareTop(0) - 0.15 * tile)}>
+    <div className="pointer-events-none absolute inset-0" style={{ '--t': `${tile}px` } as CSSProperties}>
+      <div className={`${LABEL} t-text-19`} style={labelBox(squareLeft(0) + tile / 2, squareTop(0) - 0.15 * tile)}>
         Start
       </div>
       <div
-        className="board-label small"
+        className={`${LABEL} t-text-19`}
         style={labelBox(squareLeft(size - 1) + tile / 2, squareTop(size - 1) + tile + 0.17 * tile)}
       >
         Goal
@@ -94,7 +102,7 @@ export function Board({
       {rows.map((r) => (
         <div
           key={`row-${r}`}
-          className="board-label"
+          className={`${LABEL} t-text-42`}
           style={labelBox(left - 2 * gap, squareTop(r) + tile / 2)}
         >
           {r + 1}
@@ -103,7 +111,7 @@ export function Board({
       {cols.map((c) => (
         <div
           key={`col-${c}`}
-          className="board-label"
+          className={`${LABEL} t-text-42`}
           style={labelBox(squareLeft(c) + tile / 2, top + (size - 1) * pitch + tile + 2 * gap)}
         >
           {columnLetter(c)}
@@ -134,7 +142,7 @@ export function Board({
             <button
               key={`${r}-${c}`}
               type="button"
-              className={`square ${outlined ? 'outlined' : ''} ${clickable ? 'clickable' : ''}`}
+              className={`${SQUARE} ${outlined ? OUTLINED : ''} ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
               style={style}
               onClick={clickable ? () => onSquare?.(pos) : undefined}
               tabIndex={clickable ? 0 : -1}
@@ -145,16 +153,16 @@ export function Board({
               }
             >
               {isGoal ? (
-                <img className="star" src={artUrl('star')} alt="" draggable={false} />
+                <img className="absolute t-top-60 t-left-58 h-auto t-w-34" src={artUrl('star')} alt="" draggable={false} />
               ) : (
-                <span className="digit">{value}</span>
+                <span className="absolute t-top-74 t-left-62 -translate-1/2 font-digit t-text-47 leading-none font-bold text-white">{value}</span>
               )}
             </button>
           )
         }),
       )}
 
-      <div className="layer">
+      <div className={LAYER}>
         {notes &&
           Array.from(notes).flatMap(([key, note]) => {
             const [r, c] = key.split(',').map(Number)
@@ -164,7 +172,7 @@ export function Board({
               return (
                 <span
                   key={`${key}-${dir}`}
-                  className="note-arrow"
+                  className="absolute t-h-23 t-w-17 mask-contain mask-center mask-no-repeat"
                   style={{
                     left: squareLeft(c) + tile / 2 + spot.x * tile,
                     top: squareTop(r) + tile / 2 + spot.y * tile,
@@ -180,7 +188,7 @@ export function Board({
       </div>
 
       {showCount && visits && (
-        <div className="layer">
+        <div className={LAYER}>
           {visits.flatMap((row, r) =>
             row.map((n, c) => {
               if (n === 0) return null
@@ -189,11 +197,11 @@ export function Board({
               return (
                 <span
                   key={`paw-${r}-${c}`}
-                  className="paw"
+                  className="absolute t-h-43 t-w-42"
                   style={{ left: squareLeft(c) + 0.76 * tile, top: squareTop(r) + 0.74 * tile }}
                 >
-                  <img src={artUrl(paw)} alt="" draggable={false} />
-                  <span className="paw-number">{n}</span>
+                  <img className="img-fill" src={artUrl(paw)} alt="" draggable={false} />
+                  <span className="absolute top-[62%] left-[58%] -translate-1/2 t-text-20 leading-none font-bold text-white">{n}</span>
                 </span>
               )
             }),
@@ -203,7 +211,7 @@ export function Board({
 
       {bunny && (
         <img
-          className="bunny"
+          className="pointer-events-none absolute t-h-89 w-auto [transition:left_0.22s_ease,top_0.22s_ease,transform_0.22s_ease] motion-reduce:[transition:none]"
           src={artUrl('bunny')}
           alt="Julia the bunny"
           draggable={false}

@@ -167,14 +167,14 @@ export function PlaySession({
   const showNav = source.kind === 'builtin'
 
   return (
-    <div className="screen">
+    <div className="absolute inset-0">
       {!replay && (
-        <div className="jumps">
-          Jumps: <span>{jumpCount(play)}</span>
+        <div className="absolute top-14 left-50 text-[34px] leading-44 font-bold whitespace-nowrap portrait:top-84 portrait:left-0 portrait:w-600 portrait:text-center">
+          Jumps: <span className="ml-[0.28em]">{jumpCount(play)}</span>
         </div>
       )}
 
-      {replay && <div className="replay-label">REPLAY</div>}
+      {replay && <div className="absolute top-3 left-640 w-320 text-center text-[58px] leading-64 font-bold text-red portrait:top-84 portrait:left-0 portrait:w-600 portrait:text-[44px] portrait:leading-48">REPLAY</div>}
 
       {showNav && (
         <NavArrows
@@ -225,8 +225,8 @@ export function PlaySession({
         canClick={canClick}
       />
 
-      {won && <div className="message win">You win!</div>}
-      {stuck && <div className="message lose">{LOSE_MESSAGE}</div>}
+      {won && <div className="absolute top-510 left-48 text-[36px] leading-48 font-bold whitespace-nowrap text-red portrait:top-775 portrait:left-0 portrait:w-600 portrait:text-center">You win!</div>}
+      {stuck && <div className="absolute top-506 left-25 w-190 text-center text-[14px] leading-20 font-bold text-red portrait:top-778 portrait:left-50 portrait:w-500 portrait:text-[20px] portrait:leading-26">{LOSE_MESSAGE}</div>}
 
       {source.kind === 'builtin' && !replay && (
         <RecordsPanel
