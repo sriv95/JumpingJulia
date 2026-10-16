@@ -12,6 +12,8 @@ import {
 import type { NoteTool } from './game/notes'
 import { recordWin } from './game/records'
 import {
+  clearSavedProgress,
+  EMPTY_PROGRESS,
   loadProgress,
   saveProgress,
   unlockedUpTo,
@@ -115,6 +117,15 @@ export default function App() {
     setProgress((p) => withAttempt(p, id, attempt))
   }
 
+  const handleReset = () => {
+    if (!window.confirm('Reset all progress? Solved puzzles, saved attempts and records will be erased.')) return
+    clearSavedProgress()
+    setProgress(EMPTY_PROGRESS)
+    setSession(null)
+    setPickerSize(4)
+    setScreen('home')
+  }
+
   const recordsHere =
     session?.source.kind === 'builtin' ? (progress.records.get(session.source.id) ?? {}) : {}
 
@@ -160,6 +171,7 @@ export default function App() {
           onRandom={openRandom}
           showCount={showCount}
           onCount={setShowCount}
+          onReset={handleReset}
           onBack={() => setScreen(origin)}
         />
       )}

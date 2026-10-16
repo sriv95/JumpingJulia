@@ -12,6 +12,7 @@ interface LevelsScreenProps {
   onRandom: () => void
   showCount: boolean
   onCount: (value: boolean) => void
+  onReset: () => void
   onBack: () => void
 }
 
@@ -26,6 +27,7 @@ const SPOTS = {
     random: [776, 313],
     toggle: [123, 540],
     back: [873, 546],
+    reset: [650, 546],
   },
   portrait: {
     sizeX: [110, 300, 490],
@@ -36,6 +38,7 @@ const SPOTS = {
     random: [440, 500],
     toggle: [300, 650],
     back: [300, 880],
+    reset: [300, 780],
   },
 } as const
 
@@ -49,6 +52,7 @@ export function LevelsScreen({
   onRandom,
   showCount,
   onCount,
+  onReset,
   onBack,
 }: LevelsScreenProps) {
   const first = (size - 4) * 15 + 1
@@ -76,6 +80,10 @@ export function LevelsScreen({
 
       <div className="count-label">Count:</div>
       <Toggle x={spot.toggle[0]} y={spot.toggle[1]} w={149} h={58} value={showCount} onChange={onCount} label="Count" fontSize={27} />
+
+      <Pill x={spot.reset[0]} y={spot.reset[1]} w={200} onClick={onReset}>
+        Reset Progress
+      </Pill>
 
       <Pill x={spot.back[0]} y={spot.back[1]} onClick={onBack}>
         Back

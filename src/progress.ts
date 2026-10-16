@@ -161,3 +161,12 @@ export function saveProgress(progress: Progress): void {
     // Storage can be blocked (private window, embedded view); the game still works without it.
   }
 }
+
+/** Wipe everything the game stored in the browser. */
+export function clearSavedProgress(): void {
+  try {
+    window.localStorage.clear()
+  } catch {
+    // Storage may be unavailable; there is nothing to clear then.
+  }
+}
