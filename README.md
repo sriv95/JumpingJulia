@@ -7,7 +7,7 @@ Julia starts at A1. Each square holds a number; from a square she must jump **ex
 up, down, left or right, staying on the board. Reach the orange star to win. Revisiting squares is allowed.
 
 ## Play at
-`https://sriv95.github.io/JumpingJulia/`
+https://sriv95.github.io/JumpingJulia/
 
 ## Features
 
